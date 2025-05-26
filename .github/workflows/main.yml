@@ -1,0 +1,64 @@
+name: Create EKS Cluster & Bootstrap Flux (Default Namespace)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  create-eks-and-bootstrap-flux:
+    name: Provision EKS and Bootstrap Flux
+    runs-on: ubuntu-latest
+
+    env:
+      AWS_REGION: eu-north-1                # ✅ Update your AWS region
+      CLUSTER_NAME: flux-cluster         # ✅ Name for your EKS cluster
+      FLUX_REPO_OWNER: fevindiaa           # ✅ Your GitHub username/org
+      FLUX_REPO_NAME: Multi-Tenancy        # ✅ Your GitHub repo
+      FLUX_REPO_BRANCH: main
+      FLUX_REPO_PATH: infrastructure       # ✅ Path to deploy Flux from
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install eksctl
+        run: |
+          curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+          sudo mv /tmp/eksctl /usr/local/bin
+
+      - name: Create EKS Cluster
+        run: |
+          eksctl create cluster \
+            --name $CLUSTER_NAME \
+            --region $AWS_REGION \
+            --nodes 2 \
+            --node-type t3.medium \
+            --managed \
+            --with-oidc \
+            --ssh-access
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --region $AWS_REGION --name $CLUSTER_NAME
+
+      - name: Install Flux CLI
+        run: |
+          curl -s https://fluxcd.io/install.sh | sudo bash
+
+      - name: Bootstrap Flux into default namespace
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}  # Must be a PAT if using --token-auth
+        run: |
+          flux bootstrap github \
+            --owner=$FLUX_REPO_OWNER \
+            --repository=$FLUX_REPO_NAME \
+            --branch=$FLUX_REPO_BRANCH \
+            --personal \
+            --path=$FLUX_REPO_PATH \
+            --token-auth

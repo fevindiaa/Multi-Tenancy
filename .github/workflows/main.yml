@@ -1,7 +1,8 @@
 name: Create EKS Cluster & Bootstrap Flux (Default Namespace)
 
 on:
-  workflow_dispatch:
+  push:
+    branches: main
 
 jobs:
   create-eks-and-bootstrap-flux:

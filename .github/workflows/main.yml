@@ -10,13 +10,13 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      AWS_REGION: eu-north-1                # ✅ Update your AWS region
-      CLUSTER_NAME: flux-cluster         # ✅ Name for your EKS cluster
-      FLUX_REPO_OWNER: fevindiaa           # ✅ Your GitHub username/org
-      FLUX_REPO_NAME: Multi-Tenancy        # ✅ Your GitHub repo
+      AWS_REGION: eu-north-1                
+      CLUSTER_NAME: flux-cluster         
+      FLUX_REPO_OWNER: fevindiaa          
+      FLUX_REPO_NAME: Multi-Tenancy      
       FLUX_REPO_BRANCH: main
-      FLUX_REPO_PATH: infrastructure       # ✅ Path to deploy Flux from
-
+      FLUX_REPO_PATH: infrastructure      
+      
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -42,7 +42,6 @@ jobs:
             --node-type t3.medium \
             --managed \
             --with-oidc \
-            --ssh-access
 
       - name: Update kubeconfig
         run: |

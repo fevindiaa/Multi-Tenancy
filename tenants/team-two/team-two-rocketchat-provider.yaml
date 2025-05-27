@@ -6,4 +6,4 @@ metadata:
 spec:
  type: rocket
  channel: "#team-two"
- address: http://51.20.142.85:3000/hooks/683047025ebb480712285725/CspCDh4LQgCQPrEQRtnaTFGeP6Z4ETz7JRo2sfs6uKTFfNga
+ address: http://a5653c5450b654caab3f1325c50d11e1-1089088148.eu-north-1.elb.amazonaws.com/hooks/6835763289f951bb3d0bb695/cFHFakYYNNHQi3PH5TAM9TXnAqMBXAemRQLy7tNfd27LoroB

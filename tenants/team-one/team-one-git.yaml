@@ -8,4 +8,4 @@ spec:
   interval: 1m0s
   ref:
     branch: main
-  url: https://github.com/aditya15721/team-one-webapp.git
+  url: https://github.com/fevindiaa/team-one-webapp.git

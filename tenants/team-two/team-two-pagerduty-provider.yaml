@@ -6,6 +6,6 @@ metadata:
 spec:
   type: pagerduty
   address: https://events.pagerduty.com/v2/enqueue
-  channel: 9c84859faccb4d07d04a9d65a52113ca
+  channel: d2acc05d6cbd4b00c04bc840e83ae3fb
   # secretRef:
   #   name: pagerduty-secret
